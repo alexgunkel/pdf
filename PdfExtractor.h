@@ -3,6 +3,7 @@
 
 
 #include <memory>
+#include <string_view>
 
 class PdfExtractor {
     struct config;
@@ -10,7 +11,7 @@ class PdfExtractor {
 public:
     PdfExtractor();
     ~PdfExtractor();
-    std::string parseFile(char *fileName) const;
+    [[nodiscard]] std::string parseFile(std::string_view fileName) const;
 };
 
 

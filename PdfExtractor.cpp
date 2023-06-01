@@ -18,9 +18,9 @@ struct PdfExtractor::config {
     TextOutputControl textOutputControl;
 };
 
-std::string PdfExtractor::parseFile(char * fileName) const {
+std::string PdfExtractor::parseFile(std::string_view fileName) const {
     std::stringbuf stringBuf{};
-    auto doc = new PDFDoc(fileName, nullptr, nullptr, nullptr);
+    auto doc = new PDFDoc(const_cast<char*>(fileName.data()), nullptr, nullptr, nullptr);
     if (!doc->isOk()) {
         throw std::runtime_error{"cannot read file"};
     }

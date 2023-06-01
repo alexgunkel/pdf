@@ -9,16 +9,19 @@ FetchContent_Declare(xpdf
         URL_HASH SHA224=d08af26e0d084da07da2c660dbc00ffa6422d2bb6b724c107fb18e70
 )
 
-FETCHCONTENT_DECLARE(pistache
+FetchContent_Declare(pistache
         GIT_REPOSITORY https://github.com/pistacheio/pistache.git
         GIT_TAG a68ad0902d2cfc23f69fc16e26747ac77bc2f123)
 
+FetchContent_Populate(pistache)
+add_subdirectory(${pistache_SOURCE_DIR} ${pistache_BINARY_DIR})
 
-FetchContent_MakeAvailable(xpdf pistache)
+FetchContent_MakeAvailable(xpdf)
 
 include_directories(${xpdf_SOURCE_DIR})
 include_directories(${xpdf_SOURCE_DIR}/goo)
 include_directories(${xpdf_BINARY_DIR})
+include_directories(${pistache_SOURCE_DIR}/include)
 
 find_package(ZLIB)
 
@@ -31,4 +34,4 @@ add_executable(pdfservice
         main.cpp
         ${xpdf_SOURCE_DIR}/xpdf/TextOutputDev.cc
         PdfExtractor.h PdfExtractor.cpp)
-target_link_libraries(pdfservice goo_objs xpdf_objs fofi_objs)
+target_link_libraries(pdfservice goo_objs xpdf_objs fofi_objs pistache)
