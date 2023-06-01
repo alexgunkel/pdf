@@ -6,11 +6,16 @@ project(pdf)
 include(FetchContent)
 FetchContent_Declare(xpdf
         URL      https://dl.xpdfreader.com/xpdf-4.04.tar.gz
+        URL_HASH SHA224=d08af26e0d084da07da2c660dbc00ffa6422d2bb6b724c107fb18e70
 )
 
+FETCHCONTENT_DECLARE(pistache
+        GIT_REPOSITORY https://github.com/pistacheio/pistache.git
+        GIT_TAG a68ad0902d2cfc23f69fc16e26747ac77bc2f123)
 
-FetchContent_MakeAvailable(xpdf)
-message($<TARGET_OBJECTS:xpdf_objs>)
+
+FetchContent_MakeAvailable(xpdf pistache)
+
 include_directories(${xpdf_SOURCE_DIR})
 include_directories(${xpdf_SOURCE_DIR}/goo)
 include_directories(${xpdf_BINARY_DIR})
