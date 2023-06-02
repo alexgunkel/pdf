@@ -1,8 +1,8 @@
 #include "Downloader.h"
+#include "PdfExtractor.h"
 
 #include <curl/curl.h>
 #include <utility>
-#include <pistache/client.h>
 
 namespace {
     size_t write_data(void *ptr, size_t size, size_t nmemb, FILE *stream) {
@@ -20,7 +20,8 @@ Downloader::Downloader(std::filesystem::path root): root_{std::move(root)} {
 std::filesystem::path Downloader::download(std::string_view url) {
     CURL *curl;
     FILE *fp;
-    auto out = root_.append("test.pdf");
+    auto out = root_;
+    out.append("test-file.pdf");
     curl = curl_easy_init();
     if (!curl) {
         throw std::runtime_error{"unable to initialize curl"};
@@ -30,9 +31,11 @@ std::filesystem::path Downloader::download(std::string_view url) {
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
-    auto res = curl_easy_perform(curl);
+    curl_easy_perform(curl);
     curl_easy_cleanup(curl);
     fclose(fp);
 
-    return out;
+    auto content = pdfExtractor_.parseFile(out.generic_string());
+
+    return content;
 }

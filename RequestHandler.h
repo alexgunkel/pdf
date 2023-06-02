@@ -8,15 +8,15 @@
 
 #include <filesystem>
 #include "pistache/http.h"
-#include "PdfExtractor.h"
+#include "Downloader.h"
 
 class RequestHandler : public Pistache::Http::Handler {
 public:
-    RequestHandler(): pdfExtractor_{std::make_shared<PdfExtractor>()} {};
+    RequestHandler(): downloader_{std::make_shared<Downloader>("/tmp")} {};
 HTTP_PROTOTYPE(RequestHandler)
     void onRequest(const Pistache::Http::Request& request, Pistache::Http::ResponseWriter writer) override ;
 private:
-    std::shared_ptr<PdfExtractor> pdfExtractor_{};
+    std::shared_ptr<Downloader> downloader_{};
 };
 
 

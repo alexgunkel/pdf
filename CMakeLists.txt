@@ -36,15 +36,16 @@ find_library(PAPER_LIBRARY
         PATH_SUFFIXES lib64 lib
         )
 
+find_package(CURL REQUIRED)
+
 add_executable(pdfservice
         main.cpp
         ${xpdf_SOURCE_DIR}/xpdf/TextOutputDev.cc
-        PdfExtractor.h PdfExtractor.cpp RequestHandler.h RequestHandler.cpp)
-target_link_libraries(pdfservice PUBLIC goo_objs xpdf_objs fofi_objs pistache)
-
-find_package(CURL REQUIRED)
+        PdfExtractor.h PdfExtractor.cpp RequestHandler.h RequestHandler.cpp Downloader.h Downloader.cpp)
+target_link_libraries(pdfservice PRIVATE ${CURL_LIBRARIES} goo_objs xpdf_objs fofi_objs pistache)
 
 add_executable(downloader
         download.cpp
-        Downloader.h Downloader.cpp)
-target_link_libraries(downloader PRIVATE ${CURL_LIBRARIES} pistache)
+        ${xpdf_SOURCE_DIR}/xpdf/TextOutputDev.cc
+        PdfExtractor.h PdfExtractor.cpp  Downloader.h Downloader.cpp)
+target_link_libraries(downloader PRIVATE ${CURL_LIBRARIES} goo_objs xpdf_objs fofi_objs)
