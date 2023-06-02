@@ -9,7 +9,7 @@ class Downloader {
 public:
     explicit Downloader(std::filesystem::path root);
 
-    std::filesystem::path download(std::string_view url);
+    static std::filesystem::path download(std::string_view url, const std::filesystem::path &dest);
     [[nodiscard]] const std::filesystem::path& path() const { return root_; }
 
 private:

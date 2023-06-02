@@ -10,7 +10,7 @@ int main(int argc, char **argv)
 
     Downloader downloader{argv[1]};
 
-    const auto place = downloader.download(argv[2]);
+    const auto place = downloader.download(argv[2], "");
     std::cout << place << std::endl;
     return 0;
 }
