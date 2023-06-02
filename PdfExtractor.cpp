@@ -22,7 +22,7 @@ std::string PdfExtractor::parseFile(std::string_view fileName) const {
     std::stringbuf stringBuf{};
     auto doc = new PDFDoc(const_cast<char*>(fileName.data()), nullptr, nullptr, nullptr);
     if (!doc->isOk()) {
-        throw std::runtime_error{"cannot read file"};
+        throw PdfExtractor::NoValidPdf{"cannot read file"};
     }
     auto out = new TextOutputDev(printChars, &stringBuf, &_cfg->textOutputControl);
 

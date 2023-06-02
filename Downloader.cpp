@@ -24,7 +24,13 @@ std::filesystem::path Downloader::download(std::string_view url, const std::file
     if (!curl) {
         throw std::runtime_error{"unable to initialize curl"};
     }
-    fp = fopen(dest.c_str(), "wb");
+    auto parent = dest.parent_path();
+    if (!std::filesystem::exists(parent) && !std::filesystem::create_directories(parent)) {
+        throw std::runtime_error{"could not create directory"};
+    }
+    if (fp = fopen(dest.c_str(), "wb"); !fp) {
+        throw std::runtime_error{"could not create file"};
+    }
     curl_easy_setopt(curl, CURLOPT_URL, url.data());
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
