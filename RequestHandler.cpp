@@ -5,7 +5,7 @@ void RequestHandler::onRequest(const Pistache::Http::Request &request, Pistache:
     std::cout << resource << " from " << request.body() << std::endl;
     auto p = std::filesystem::path(resource);
 
-    auto rel = std::filesystem::relative(p, "/home/alexander/Dokumente/OParl");
+    auto rel = std::filesystem::relative(p, root_);
     if (rel.empty() || rel.native()[0] == '.') {
         writer.send(Pistache::Http::Code::Forbidden);
         return;
