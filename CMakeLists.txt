@@ -1,8 +1,7 @@
 cmake_policy(SET CMP0048 NEW)
 
 cmake_minimum_required(VERSION 3.25)
-project(pdf)
-
+project(pdf-service)
 
 set(CURL_VERSION 7.79.1)
 set(XPDF_VERSION 4.04)
@@ -17,10 +16,7 @@ FetchContent_Declare(pistache
         GIT_REPOSITORY https://github.com/pistacheio/pistache.git
         GIT_TAG a68ad0902d2cfc23f69fc16e26747ac77bc2f123)
 
-FetchContent_Populate(pistache)
-add_subdirectory(${pistache_SOURCE_DIR} ${pistache_BINARY_DIR})
-
-FetchContent_MakeAvailable(xpdf)
+FetchContent_MakeAvailable(xpdf pistache)
 
 include_directories(${xpdf_SOURCE_DIR})
 include_directories(${xpdf_SOURCE_DIR}/goo)

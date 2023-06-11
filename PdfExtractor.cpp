@@ -1,10 +1,12 @@
 #include "PdfExtractor.h"
 #include <iostream>
+#include <filesystem>
 
 #include <xpdf/GlobalParams.h>
 #include <xpdf/PDFDoc.h>
 #include <xpdf/TextOutputDev.h>
 #include <sstream>
+#include <sys/stat.h>
 
 namespace {
     void printChars(void *stream, const char *text, int len)
@@ -19,6 +21,11 @@ struct PdfExtractor::config {
 };
 
 std::string PdfExtractor::parseFile(std::string_view fileName) const {
+    const auto st = std::filesystem::status(fileName);
+    if (!exists(st) || !is_regular_file(st)) {
+        throw PdfExtractor::NoValidPdf("file doesn't exist or is not a regular file");
+    }
+
     std::stringbuf stringBuf{};
     auto doc = new PDFDoc(const_cast<char*>(fileName.data()), nullptr, nullptr, nullptr);
     if (!doc->isOk()) {
