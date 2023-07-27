@@ -1,7 +1,9 @@
 cmake_policy(SET CMP0048 NEW)
 
-cmake_minimum_required(VERSION 3.25)
-project(pdf-service)
+cmake_minimum_required(VERSION 3.25..3.27)
+project(pdf-service
+        DESCRIPTION "builds a pdf service"
+        LANGUAGES CXX)
 
 set(CURL_VERSION 7.79.1)
 set(XPDF_VERSION 4.04)
@@ -12,11 +14,20 @@ FetchContent_Declare(xpdf
         URL_HASH SHA224=d08af26e0d084da07da2c660dbc00ffa6422d2bb6b724c107fb18e70
 )
 
+FetchContent_Declare(curl
+        URL      https://curl.se/download/curl-8.2.1.tar.gz
+        URL_HASH SHA224=cf4053afa7448de53d7035586b8ecfad72059ca6e8b8e92917a42411
+)
+
 FetchContent_Declare(pistache
         GIT_REPOSITORY https://github.com/pistacheio/pistache.git
         GIT_TAG a68ad0902d2cfc23f69fc16e26747ac77bc2f123)
 
-FetchContent_MakeAvailable(xpdf pistache)
+FetchContent_Declare(openssl
+        GIT_REPOSITORY https://github.com/openssl/openssl.git
+        GIT_TAG openssl-3.1.1)
+
+FetchContent_MakeAvailable(xpdf curl pistache openssl)
 
 include_directories(${xpdf_SOURCE_DIR})
 include_directories(${xpdf_SOURCE_DIR}/goo)
