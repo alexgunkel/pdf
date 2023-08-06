@@ -1,3 +1,4 @@
+#include <shared_mutex>
 #include "RequestHandler.h"
 
 void RequestHandler::onRequest(const Pistache::Http::Request &request, Pistache::Http::ResponseWriter writer) {

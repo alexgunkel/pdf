@@ -26,10 +26,10 @@ std::filesystem::path Downloader::download(std::string_view url, const std::file
     }
     auto parent = dest.parent_path();
     if (!std::filesystem::exists(parent) && !std::filesystem::create_directories(parent)) {
-        throw std::runtime_error{"could not create directory"};
+        throw std::runtime_error{"could not create directory " + parent.string()};
     }
-    if (fp = fopen(dest.c_str(), "wb"); !fp) {
-        throw std::runtime_error{"could not create file"};
+    if (fp = fopen(dest.c_str(), "w"); !fp) {
+        throw std::runtime_error{"could not create file " + dest.string()};
     }
     curl_easy_setopt(curl, CURLOPT_URL, url.data());
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
@@ -41,7 +41,9 @@ std::filesystem::path Downloader::download(std::string_view url, const std::file
 
     if (CURLE_OK != res) {
         std::filesystem::remove(dest);
-        throw std::runtime_error{"could not get response"};
+        std::string msg{"could not get response for "};
+        msg.append(url);
+        throw std::runtime_error{msg};
     }
 
     return {};

@@ -1,7 +1,9 @@
 cmake_policy(SET CMP0048 NEW)
 
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.22)
 project(pdf-service)
+
+set(CMAKE_CXX_STANDARD 17)
 
 set(CURL_VERSION 7.79.1)
 set(XPDF_VERSION 4.04)
@@ -45,3 +47,5 @@ add_executable(downloader
         ${xpdf_SOURCE_DIR}/xpdf/TextOutputDev.cc
         PdfExtractor.h PdfExtractor.cpp  Downloader.h Downloader.cpp)
 target_link_libraries(downloader PRIVATE ${CURL_LIBRARIES} goo_objs xpdf_objs fofi_objs)
+
+install(TARGETS pdfservice DESTINATION bin)
